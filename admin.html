@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Force Admin | Panel</title>
+    <style>
+        :root { --bg: #0d0d0d; --card: #161616; --blue: #007bff; --red: #ff3b30; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; padding: 20px; margin: 0; }
+        .container { max-width: 500px; margin: 0 auto; }
+        .card { background: var(--card); padding: 20px; border-radius: 18px; border: 1px solid #222; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h2 { margin-top: 0; font-size: 18px; color: var(--blue); text-transform: uppercase; letter-spacing: 1px; }
+        input { width: 100%; padding: 14px; margin: 10px 0; background: #222; border: 1px solid #333; color: #fff; border-radius: 12px; box-sizing: border-box; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--blue); }
+        button { width: 100%; padding: 15px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 15px; }
+        .btn-main { background: var(--blue); color: white; }
+        .btn-danger { background: transparent; color: var(--red); border: 1px solid var(--red); margin-top: 10px; }
+        button:active { transform: scale(0.98); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center; font-size: 24px;">Force Management</h1>
+        
+        <div class="card">
+            <h2>📦 Добавить новый кейс</h2>
+            <input id="name" placeholder="Название (например: ALL IN SWISS)">
+            <input id="price" type="number" placeholder="Цена в звездах">
+            <input id="img" placeholder="Путь: images/refcase15.webp">
+            <button class="btn-main" onclick="send('/api/admin/add-case', {name:v('name'), price:v('price'), image:v('img')})">Опубликовать кейс</button>
+        </div>
+
+        <div class="card">
+            <h2>💰 Изменить баланс</h2>
+            <input id="bal" type="number" placeholder="Новая сумма">
+            <button class="btn-main" onclick="send('/api/admin/set-balance', {amount:v('bal')})">Обновить баланс</button>
+        </div>
+
+        <button class="btn-danger" onclick="confirm('Точно сбросить?') && send('/api/admin/reset', {})">Удалить все кейсы</button>
+    </div>
+
+    <script>
+        const v = id => document.getElementById(id).value;
+        async function send(path, data) {
+            const r = await fetch(path, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data)});
+            if(r.ok) alert("✅ Выполнено!");
+        }
+    </script>
+</body>
+</html>
+
